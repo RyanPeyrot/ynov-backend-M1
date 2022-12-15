@@ -3,8 +3,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const User=require("./models/user.model")
-
 mongoose.set('strictQuery',false);
 
 const app = express();
@@ -14,95 +12,16 @@ mongoose.connect('mongodb+srv://ryan:admin@cluster0.rfvgci7.mongodb.net/?retryWr
     console.log("Connection successfull");
 }).catch(err=>console.log(err));
 
-/*app.get('/', (req,res) => {
-    res.send({
-        chat:"prout"
-    })
-}); */
 
-/*app.post('/api/v1/auth/login', (req,res) => {
-    if(!req.body.email || req.body.email.isEmpty()){
-        return res.status(404).send({
-          auth:false,
-            message:"User not found"
-        })
-    }
-    res.send({
-        auth:true,
-        message:"User logged"
-    })
-   console.log(req.body);
-});*/
+app.post('/auth/register',)
 
-app.post('/auth/register',(req,res) => {
-    const newUser = new User({
-        firstName:req.body.firstName,
-        lastName:req.body.lastName,
-        email:req.body.email,
-        password:req.body.password
-    })
+app.put("/updateUser/:id",)
 
-    bcrypt.genSalt(10,(saltError, salt) => {
-        if (saltError) {
-            throw saltError
-        } else {
-            bcrypt.hash(newUser.password, salt, function(hashError, hash) {
-                if (hashError) {
-                    throw hashError
-                } else {
-                    newUser.password = hash;
-                }
-            });
-        }
-    })
+app.delete("/deleteUser/:id",);
 
-    newUser.save()
-        .then((user)=>{
-            res.send(user);
-        })
-        .catch(err=>{
-            res.status(404).send(err);
-        })
-})
+app.get("/auth/user/:id",)
 
-//Todo : update user
-app.put("/updateUser/:id",(req,res) => {
-    User.findByIdAndUpdate({_id:req.params.id},{...req.body,_id:req.params.id})
-        .then((user)=>{
-            res.send(user);
-        })
-        .catch(err=>{
-            res.status(404).send(err);
-        })
-})
-//todo : delete user
-app.delete("/deleteUser/:id",(req,res) => {
-    User.findOneAndDelete({ _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Utilisateur supprimé !'}))
-        .catch(error => res.status(400).json({ error }));
-});
-
-//todo : find one user by id
-app.get("/auth/user/:id",(req,res) => {
-    User.findOne({_id:req.params.id}).then((user)=>{
-        res.send(user);
-    })
-        .catch(err=>{
-            res.status(404).send(err);
-        })
-
-})
-
-//todo: find all user
-app.get("/Users",(req,res) => {
-    User.find().then((user)=>{
-        res.send(user);
-    })
-        .catch(err=>{
-            res.status(404).send(err);
-        })
-
-})
+app.get("/Users",)
 
 app.listen("4000",function (){
     console.log("server launch");
