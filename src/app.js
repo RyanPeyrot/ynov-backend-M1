@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
 const User=require("./models/user.model")
 
 mongoose.set('strictQuery',false);
@@ -36,9 +38,24 @@ app.post('/auth/register',(req,res) => {
     const newUser = new User({
         firstName:req.body.firstName,
         lastName:req.body.lastName,
-        email:req.body.lastName,
-        password:req.body.email
+        email:req.body.email,
+        password:req.body.password
     })
+
+    bcrypt.genSalt(10,(saltError, salt) => {
+        if (saltError) {
+            throw saltError
+        } else {
+            bcrypt.hash(newUser.password, salt, function(hashError, hash) {
+                if (hashError) {
+                    throw hashError
+                } else {
+                    newUser.password = hash;
+                }
+            });
+        }
+    })
+
     newUser.save()
         .then((user)=>{
             res.send(user);
@@ -50,7 +67,7 @@ app.post('/auth/register',(req,res) => {
 
 //Todo : update user
 app.put("/updateUser/:id",(req,res) => {
-    User.findOneAndUpdate({_id:req.params.id},{...req.body,_id:req.params.id})
+    User.findByIdAndUpdate({_id:req.params.id},{...req.body,_id:req.params.id})
         .then((user)=>{
             res.send(user);
         })
