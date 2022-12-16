@@ -3,9 +3,13 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
 const apiRouter = require('./routes/index');
+const cors = require('cors');
+
 
 mongoose.set('strictQuery',false);
 app.use(bodyParser.json());
+
+app.use(cors());
 
 mongoose.connect('mongodb+srv://ryan:admin@cluster0.rfvgci7.mongodb.net/?retryWrites=true&w=majority').then(()=>{
     console.log("Connection successfull");

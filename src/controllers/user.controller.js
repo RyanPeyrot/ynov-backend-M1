@@ -9,7 +9,7 @@ exports.create = (req,res) => {
         password:req.body.password
     })
 
-    bcrypt.genSalt(10,(saltError, salt) => {
+    /*bcrypt.genSalt(10,(saltError, salt) => {
         if (saltError) {
             throw saltError
         } else {
@@ -21,7 +21,7 @@ exports.create = (req,res) => {
                 }
             });
         }
-    })
+    })*/
 
     newUser.save()
         .then((user)=>{
