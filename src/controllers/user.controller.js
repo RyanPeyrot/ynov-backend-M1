@@ -1,31 +1,23 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require('dotenv').config()
 
 exports.create = (req,res) => {
+
+    const hashPassword = bcrypt.hashSync(req.body.password, 10);
+
     const newUser = new User({
         firstName:req.body.firstName,
         lastName:req.body.lastName,
         email:req.body.email,
-        password:req.body.password
+        password:hashPassword
     })
-
-    /*bcrypt.genSalt(10,(saltError, salt) => {
-        if (saltError) {
-            throw saltError
-        } else {
-            bcrypt.hash(newUser.password, salt, function(hashError, hash) {
-                if (hashError) {
-                    throw hashError
-                } else {
-                    newUser.password = hash;
-                }
-            });
-        }
-    })*/
 
     newUser.save()
         .then((user)=>{
-            res.send(user);
+            const token = jwt.sign({id: user._id, isAdmin: user.isAdmin},process.env.JWTSECRET);
+            res.send(token);
         })
         .catch(err=>{
             res.status(404).send(err);
