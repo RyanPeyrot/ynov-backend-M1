@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const app = express();
 const apiRouter = require('./routes/index');
 const cors = require('cors');
-require('.dotenv').config()
 
 
 mongoose.set('strictQuery',false);

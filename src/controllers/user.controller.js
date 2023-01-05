@@ -16,8 +16,11 @@ exports.create = (req,res) => {
 
     newUser.save()
         .then((user)=>{
-            const token = jwt.sign({id: user._id, isAdmin: user.isAdmin},process.env.JWTSECRET);
-            res.send(token);
+            const token = jwt.sign({
+                id: user._id,
+                isAdmin: user.isAdmin
+            },process.env.JWTSECRET);
+            res.send({token});
         })
         .catch(err=>{
             res.status(404).send(err);
