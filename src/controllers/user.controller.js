@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require('dotenv').config()
 
-exports.create = (req,res) => {
+exports.register = (req,res) => {
 
     const hashPassword = bcrypt.hashSync(req.body.password, 10);
 
@@ -60,7 +60,7 @@ exports.deleteOne = (req,res) => {
 }
 
 exports.getOneById = (req,res) => {
-    User.findOne({_id:req.params.id}).then((user)=>{
+    User.findOne({_id:req.userToken.id}).then((user)=>{
         res.send(user);
     })
         .catch(err=>{
@@ -77,4 +77,16 @@ exports.getAll = (req,res) => {
             res.status(404).send(err);
         })
 
+}
+
+exports.login = (req,res) => {
+    User.findOne({mail:req.mail,password:req.password}).then((user) => {
+        const token = jwt.sign({
+            id: user._id,
+            isAdmin: user.isAdmin
+        },process.env.JWTSECRET);
+        res.send({token});
+    }).catch(err => {
+        res.status(404).send(err);
+    })
 }

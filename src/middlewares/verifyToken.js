@@ -18,6 +18,9 @@ function verifyToken(req, res, next){
                 message : err.message
             });
         }
+        req.userToken = decoded;
+        next();
     });
-    next();
 }
+
+module.exports = verifyToken;
