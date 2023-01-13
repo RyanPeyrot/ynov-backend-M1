@@ -1,12 +1,16 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const signJwt = require("../helpers/signJwt");
+const {validationResult} = require("express-validator");
 
 exports.register = (req,res) => {
+    const errors = validationResult(req);
+    console.log(errors.isEmpty());
+    if(!errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array() });
+    }
 
     const hashPassword = bcrypt.hashSync(req.body.password, 10);
-
     const newUser = new User({
         firstName:req.body.firstName,
         lastName:req.body.lastName,

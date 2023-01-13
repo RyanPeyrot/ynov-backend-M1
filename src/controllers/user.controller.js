@@ -1,6 +1,4 @@
 const User = require("../models/user.model");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 require('dotenv').config()
 
 exports.updateOne = (req,res) => {
@@ -20,7 +18,7 @@ exports.updateOne = (req,res) => {
 
 exports.deleteOne = (req,res) => {
     User.findOneAndDelete({ _id: req.params.id })
-        .then(() =>
+        .then((user) =>
         {
             if(!user){
                 return res.status(404).send({

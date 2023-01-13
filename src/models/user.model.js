@@ -1,4 +1,10 @@
 const mongoose = require('mongoose');
+const {Schema} = require("mongoose");
+
+const userType = {
+    owner : "Owner",
+    customer : "CUSTOMER"
+}
 
 const userSchema = mongoose.Schema({
     firstName : {
@@ -33,7 +39,15 @@ const userSchema = mongoose.Schema({
         type:Boolean,
         required:true,
         default:false
-    }
+    },
+    type : {
+        type: userType,
+        required : true
+    },
+    places : [{
+        type : Schema.Types.ObjectId,
+        ref : 'Place'
+    }]
 })
 
 module.exports=mongoose.model('User',userSchema)
