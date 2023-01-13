@@ -3,33 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require('dotenv').config()
 
-exports.register = (req,res) => {
-
-    const hashPassword = bcrypt.hashSync(req.body.password, 10);
-
-    const newUser = new User({
-        firstName:req.body.firstName,
-        lastName:req.body.lastName,
-        email:req.body.email,
-        password:hashPassword
-    })
-
-    newUser.save()
-        .then((user)=>{
-            const token = jwt.sign({
-                id: user._id,
-                isAdmin: user.isAdmin
-            },process.env.JWTSECRET);
-            res.send({token});
-        })
-        .catch(err=>{
-            res.status(404).send(err);
-        })
-}
-
-
 exports.updateOne = (req,res) => {
-    User.findByIdAndUpdate({_id:req.params.id},{...req.body,_id:req.params.id})
+    User.findByIdAndUpdate({_id:req.userToken.id},{...req.body,_id:req.userToken.id})
         .then((user)=>{
             if(!user){
                 return res.status(404).send({
@@ -77,16 +52,4 @@ exports.getAll = (req,res) => {
             res.status(404).send(err);
         })
 
-}
-
-exports.login = (req,res) => {
-    User.findOne({mail:req.mail,password:req.password}).then((user) => {
-        const token = jwt.sign({
-            id: user._id,
-            isAdmin: user.isAdmin
-        },process.env.JWTSECRET);
-        res.send({token});
-    }).catch(err => {
-        res.status(404).send(err);
-    })
 }
