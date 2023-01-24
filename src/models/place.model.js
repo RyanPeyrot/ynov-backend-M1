@@ -10,15 +10,15 @@ const placeSchema = mongoose.Schema({
         maxLength:90
     },
     type:{
-        type : Schema.Types.ObjectId,
+        type : mongoose.Schema.Types.ObjectId,
         ref : 'PlaceType'
     },
     owner:{
-        type : Schema.Types.ObjectId,
+        type : mongoose.Schema.Types.ObjectId,
         ref : 'User'
     },
     pricing:{
-        PerDay:{
+        perDay:{
             type : Number,
             required:true,
         }
@@ -53,13 +53,10 @@ const placeSchema = mongoose.Schema({
         gps:{
             lat:{
                 type:Number,
-                required : true,
             },
             lon:{
                 type:Number,
-                required : true,
-            },
-            required : false
+            }
         }
     }
 })

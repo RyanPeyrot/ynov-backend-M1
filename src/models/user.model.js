@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 const {Schema} = require("mongoose");
 
-const userType = {
-    owner : "Owner",
-    customer : "CUSTOMER"
-}
-
 const userSchema = mongoose.Schema({
     firstName : {
         type:String,
@@ -40,10 +35,11 @@ const userSchema = mongoose.Schema({
         required:true,
         default:false
     },
-    type : {
-        type: userType,
+    type : [{
+        type: String,
+        enum:["OWNER","CUSTOMER"],
         required : true
-    },
+    }],
     places : [{
         type : Schema.Types.ObjectId,
         ref : 'Place'

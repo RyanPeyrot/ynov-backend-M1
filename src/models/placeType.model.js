@@ -5,8 +5,7 @@ const placeTypeSchema = mongoose.Schema({
         type : String,
         required : true,
         maxLength : 30,
-        minLength:3,
-        trim : true
+        minLength:3
     }
 })
 

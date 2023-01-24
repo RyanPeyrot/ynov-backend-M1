@@ -15,6 +15,7 @@ exports.register = (req,res) => {
         firstName:req.body.firstName,
         lastName:req.body.lastName,
         email:req.body.email,
+        type:req.body.type,
         password:hashPassword
     })
 
@@ -45,6 +46,7 @@ exports.login = (req,res) => {
         });
 
     }).catch(err => {
+        console.log(req.body.email);
         return res.status(404).send({
             auth:false,
             message : "Email not found"

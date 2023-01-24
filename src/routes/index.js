@@ -7,7 +7,7 @@ const placeTypeRouter = require('./placeType.route')
 
 router.use('/user',userRouter);
 router.use('/auth',authRouter);
-router.use('/place-type',placeTypeRouter);
+router.use('/type-place',placeTypeRouter);
 router.use('/place',placeRouter)
 
 module.exports = router;

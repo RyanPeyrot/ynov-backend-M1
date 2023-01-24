@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const Place = require("../models/place.model")
 require('dotenv').config()
 
 exports.updateOne = (req,res) => {
@@ -25,6 +26,7 @@ exports.deleteOne = (req,res) => {
                     message: "User not found"
                 })
             }
+            Place.deleteMany({owner : user._id});
             res.status(200).json({ message: 'Utilisateur supprimé !'})
         })
         .catch(error => {

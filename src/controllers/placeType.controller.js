@@ -7,7 +7,7 @@ exports.createOne = (req,res) => {
     })
 
     newType.save().then( (type) => {
-        return res.send({
+        res.send({
             message : "new place type created",
             type : type
         });
