@@ -3,7 +3,7 @@ const PlaceType = require("../models/placeType.model");
 const User = require("../models/user.model");
 require('dotenv').config()
 
-exports.createOne = (req, res) => {
+exports.createOne = (req, res,next) => {
     Place.create(req.body)
         .then((place) => {
              User.findById(req.userToken.id)
@@ -16,37 +16,37 @@ exports.createOne = (req, res) => {
                          })
                  } )
         })
-        .catch(err => res.status(400).send(err));
+        .catch(err => next(err));
 }
 
-exports.getPlaces = (req, res) => {
+exports.getPlaces = (req, res,next) => {
     Place.find()
         .populate('type')
         .populate('owner')
         .then((places) => res.send(places))
-        .catch(err => res.status(400).send(err))
+        .catch(err => next(err))
 }
 
-exports.getMyPlaces = (req,res) => {
+exports.getMyPlaces = (req,res,next) => {
     User.findById(req.userToken.id).populate('places')
         .then( (user) => {
             res.send(user.places);
     })
         .catch(err=>{
-            res.status(404).send(err);
+            next(err);
         })
 }
 
-exports.getPlacesByUser = (req,res) => {
+exports.getPlacesByUser = (req,res,next) => {
     User.findById(req.body.userId).then((user)=>{
         res.send(user.places);
     })
         .catch(err=>{
-            res.status(404).send(err);
+            next(err);
         })
 }
 
-exports.getMyPlace = (req,res) => {
+exports.getMyPlace = (req,res,next) => {
     User.findById(req.userToken.id).populate('places')
         .then(user => {
             if(!user){
@@ -56,20 +56,20 @@ exports.getMyPlace = (req,res) => {
             res.send(place)
         })
         .catch(err => {
-            res.status(404).send(err);
+            next(err);
         })
 }
 
-exports.getPlaceByUser = (req,res) => {
+exports.getPlaceByUser = (req,res,next) => {
     Place.findOne({_id:req.body.id,owner:req.body.owner})
         .then((place) => {
             res.send(place);
     })
         .catch(err=>{
-            res.status(404).send(err);
+            next(err);
         })
 }
-exports.updateMyPlace = (req,res) => {
+exports.updateMyPlace = (req,res,next) => {
     Place.findOneAndUpdate({_id:req.params.id,owner:req.userToken.id},{...req.body,_id:req.params.id,owner:req.userToken.id})
         .then((place) => {
             res.send({
@@ -77,11 +77,11 @@ exports.updateMyPlace = (req,res) => {
                 place
             });
         }).catch(err => {
-        res.status(404).send(err);
+        next(err);
     })
 }
 
-exports.deleteMyPlace = (req,res) => {
+exports.deleteMyPlace = (req,res,next) => {
         Place.findOneAndDelete({_id: req.params.id, owner: req.userToken.id})
             .then((place) => {
                 if(!place){
@@ -100,13 +100,13 @@ exports.deleteMyPlace = (req,res) => {
                         })
                     })
                     .catch(err => {
-                        return res.send(err)
+                        next(err)
                     })
                 res.send({
                     place,
                     message : "Place deleted"
                 })
             }).catch(err => {
-            res.status(404).send(err);
+            next(err)
         })
 }

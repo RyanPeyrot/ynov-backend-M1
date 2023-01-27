@@ -28,9 +28,6 @@ function validateUser(req,res,next){
             },
         }
     }
-
-    console.log(userValidSchema);
-
     checkSchema(userValidSchema)
     next();
 }

@@ -1,7 +1,7 @@
 const PlaceType = require("../models/placeType.model")
 const User = require("../models/user.model");
 
-exports.createOne = (req,res) => {
+exports.createOne = (req,res,next) => {
     const newType = new PlaceType({
         title : req.body.title
     })
@@ -13,11 +13,11 @@ exports.createOne = (req,res) => {
         });
     })
         .catch(err=>{
-            return res.status(404).send(err);
+            next(err);
         })
 }
 
-exports.deleteOne = (req,res) => {
+exports.deleteOne = (req,res,next) => {
     PlaceType.findOneAndDelete({_id : req.body.typeId})
         .then((type) =>
         {
@@ -28,31 +28,31 @@ exports.deleteOne = (req,res) => {
             }
             res.status(200).json({ message: 'Type deleted !'})
         })
-        .catch(error => {
-            res.status(400).json({ error })
+        .catch(err => {
+            next(err)
         });
 }
 
-exports.getOneById = (req,res) => {
+exports.getOneById = (req,res,next) => {
     PlaceType.findOne({_id:req.body.typeId}).then((type)=>{
         res.send(type);
     })
         .catch(err=>{
-            res.status(404).send(err);
+            next(err)
         })
 
 }
 
-exports.getAll = (req,res) => {
+exports.getAll = (req,res,next) => {
     PlaceType.find().then((types) =>{
         res.send(types);
     })
         .catch(err=>{
-            res.status(404).send(err);
+            next(err)
         })
 }
 
-exports.updateOne = (req,res) => {
+exports.updateOne = (req,res,next) => {
     PlaceType.findByIdAndUpdate({_id:req.body.typeId},{...req.body,_id:req.body.typeId})
         .then((type)=>{
             if(!type){
@@ -63,6 +63,6 @@ exports.updateOne = (req,res) => {
             res.send(type);
         })
         .catch(err=>{
-            res.status(404).send(err);
+            next(err)
         })
 }

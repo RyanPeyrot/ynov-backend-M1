@@ -3,7 +3,8 @@ const bcrypt = require("bcryptjs");
 const signJwt = require("../helpers/signJwt");
 const {validationResult} = require("express-validator");
 
-exports.register = (req,res) => {
+
+exports.register = (req,res,next) => {
     const errors = validationResult(req);
     console.log(errors.isEmpty());
     if(!errors.isEmpty()){
@@ -25,12 +26,19 @@ exports.register = (req,res) => {
             return res.send({token});
         })
         .catch(err=>{
-            return res.status(404).send(err);
+            next(err);
         })
 }
 
-exports.login = (req,res) => {
+exports.login = (req,res,next) => {
     User.findOne({email : req.body.email}).then((user) => {
+        if(user == null){
+            return res.status(401).send({
+                auth:false,
+                message : "Email error"
+            })
+        }
+
         if(!bcrypt.compareSync(req.body.password,user.password)){
             return res.status(401).send({
                 auth:false,
@@ -44,12 +52,7 @@ exports.login = (req,res) => {
             message : "User logged",
             token
         });
-
     }).catch(err => {
-        console.log(req.body.email);
-        return res.status(404).send({
-            auth:false,
-            message : "Email not found"
-        })
+        next(err);
     })
 }
