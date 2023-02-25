@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const {Schema} = require("mongoose");
 
 const placeSchema = mongoose.Schema({
     title : {

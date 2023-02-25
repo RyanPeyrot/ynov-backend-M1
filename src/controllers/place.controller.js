@@ -27,6 +27,14 @@ exports.getPlaces = (req, res,next) => {
         .catch(err => next(err))
 }
 
+exports.getOnePlace = (req, res,next) => {
+    Place.findById(req.params.id)
+        .populate('type')
+        .populate('owner')
+        .then((places) => res.send(places))
+        .catch(err => next(err))
+}
+
 exports.getMyPlaces = (req,res,next) => {
     User.findById(req.userToken.id).populate('places')
         .then( (user) => {
