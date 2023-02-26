@@ -22,6 +22,9 @@ const placeSchema = mongoose.Schema({
             required:true,
         }
     },
+    rate :{
+        type : Number,
+    },
     image:[String],
     capacity : {
         type : Number,

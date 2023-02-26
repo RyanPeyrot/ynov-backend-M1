@@ -13,6 +13,9 @@ const BookingSchema = mongoose.Schema({
         type: Date,
         required:true,
     },
+    numberOfNight:{
+        type: Number
+    },
     status : {
         type : String,
         enum :["WAITING","BOOKED","DECLINE","CANCELED"],
