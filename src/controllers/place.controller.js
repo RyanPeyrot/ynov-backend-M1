@@ -36,7 +36,13 @@ exports.getOnePlace = (req, res,next) => {
 }
 
 exports.getMyPlaces = (req,res,next) => {
-    User.findById(req.userToken.id).populate('places')
+    User.findById(req.userToken.id).populate({
+        path: 'places',
+        populate: {
+            path: 'type',
+            model: 'PlaceType'
+        }
+    })
         .then( (user) => {
             res.send(user.places);
     })
