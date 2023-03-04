@@ -116,10 +116,6 @@ exports.deleteMyPlace = (req,res,next) => {
                     .catch(err => {
                         next(err)
                     })
-                res.send({
-                    place,
-                    message : "Place deleted"
-                })
             }).catch(err => {
             next(err)
         })
